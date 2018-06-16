@@ -34,6 +34,7 @@ variable "tags" {
 
 variable "vpc_id" {
   description = "VPC where the cluster and workers will be deployed."
+  default     = "vpc-ef597494"
 }
 
 variable "worker_groups" {
