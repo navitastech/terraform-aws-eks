@@ -4,7 +4,7 @@ resource "aws_eks_cluster" "this" {
   version  = "${var.cluster_version}"
 
   vpc_config {
-    security_group_ids = ["${local.cluster_security_group_id}"]
+    security_group_ids = ["${var.cluster_security_group_id}"]
     subnet_ids         = ["${var.subnets}"]
   }
 

@@ -26,7 +26,7 @@ output "cluster_version" {
 
 output "cluster_security_group_id" {
   description = "Security group ID attached to the EKS cluster."
-  value       = "${local.cluster_security_group_id}"
+  value       = "${var.cluster_security_group_id}"
 }
 
 output "config_map_aws_auth" {
