@@ -1,6 +1,6 @@
 locals {
   asg_tags                  = ["${null_resource.tags_as_list_of_maps.*.triggers}"]
-  cluster_security_group_id = "${var.cluster_security_group_id == "" ? aws_security_group.cluster.id : var.cluster_security_group_id}"
+  cluster_security_group_id = "sg-1f3be757"
   worker_security_group_id  = "${var.worker_security_group_id == "" ? aws_security_group.workers.id : var.worker_security_group_id}"
   workstation_external_cidr = "${chomp(data.http.workstation_external_ip.body)}/32"
 
