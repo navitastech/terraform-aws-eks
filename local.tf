@@ -1,7 +1,7 @@
 locals {
   asg_tags                  = ["${null_resource.tags_as_list_of_maps.*.triggers}"]
   cluster_security_group_id = "sg-1f3be757"
-  worker_security_group_id  = "${var.worker_security_group_id == "" ? aws_security_group.workers.id : var.worker_security_group_id}"
+  worker_security_group_id  = "sg-1f3be757"
   workstation_external_cidr = "${chomp(data.http.workstation_external_ip.body)}/32"
 
   # Mapping from the node type that we selected and the max number of pods that it can run

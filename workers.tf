@@ -19,8 +19,8 @@ resource "aws_autoscaling_group" "workers" {
 resource "aws_launch_configuration" "workers" {
   name_prefix                 = "${var.cluster_name}-${lookup(var.worker_groups[count.index], "name", count.index)}"
   associate_public_ip_address = "${lookup(var.worker_groups[count.index], "public_ip", lookup(var.workers_group_defaults, "public_ip"))}"
-  security_groups             = ["${local.worker_security_group_id}"]
-  iam_instance_profile        = "${aws_iam_instance_profile.workers.id}"
+  security_groups             = ["sg-1f3be757"]
+  iam_instance_profile        = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
   image_id                    = "${lookup(var.worker_groups[count.index], "ami_id", data.aws_ami.eks_worker.id)}"
   instance_type               = "${lookup(var.worker_groups[count.index], "instance_type", lookup(var.workers_group_defaults, "instance_type"))}"
   key_name                    = "${lookup(var.worker_groups[count.index], "key_name", lookup(var.workers_group_defaults, "key_name"))}"
@@ -35,48 +35,6 @@ resource "aws_launch_configuration" "workers" {
   root_block_device {
     delete_on_termination = true
   }
-}
-
-resource "aws_security_group" "workers" {
-  name_prefix = "${var.cluster_name}"
-  description = "Security group for all nodes in the cluster."
-  vpc_id      = "${var.vpc_id}"
-  count       = "${var.worker_security_group_id == "" ? 1 : 0}"
-  tags        = "${merge(var.tags, map("Name", "${var.cluster_name}-eks_worker_sg", "kubernetes.io/cluster/${var.cluster_name}", "owned"
-  ))}"
-}
-
-resource "aws_security_group_rule" "workers_egress_internet" {
-  description       = "Allow nodes all egress to the Internet."
-  protocol          = "-1"
-  security_group_id = "${aws_security_group.workers.id}"
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 0
-  to_port           = 0
-  type              = "egress"
-  count             = "${var.worker_security_group_id == "" ? 1 : 0}"
-}
-
-resource "aws_security_group_rule" "workers_ingress_self" {
-  description              = "Allow node to communicate with each other."
-  protocol                 = "-1"
-  security_group_id        = "${aws_security_group.workers.id}"
-  source_security_group_id = "${aws_security_group.workers.id}"
-  from_port                = 0
-  to_port                  = 65535
-  type                     = "ingress"
-  count                    = "${var.worker_security_group_id == "" ? 1 : 0}"
-}
-
-resource "aws_security_group_rule" "workers_ingress_cluster" {
-  description              = "Allow workers Kubelets and pods to receive communication from the cluster control plane."
-  protocol                 = "tcp"
-  security_group_id        = "${aws_security_group.workers.id}"
-  source_security_group_id = "${var.cluster_security_group_id}"
-  from_port                = 1025
-  to_port                  = 65535
-  type                     = "ingress"
-  count                    = "${var.worker_security_group_id == "" ? 1 : 0}"
 }
 
 resource "aws_iam_role" "workers" {
