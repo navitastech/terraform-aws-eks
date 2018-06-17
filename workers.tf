@@ -21,9 +21,9 @@ resource "aws_launch_configuration" "workers" {
   associate_public_ip_address = "${lookup(var.worker_groups[count.index], "public_ip", lookup(var.workers_group_defaults, "public_ip"))}"
   security_groups             = ["sg-1f3be757"]
   iam_instance_profile        = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
-  image_id                    = "${lookup(var.worker_groups[count.index], "ami_id", data.aws_ami.eks_worker.id)}"
+  image_id                    = "ami-43a15f3e"
   instance_type               = "${lookup(var.worker_groups[count.index], "instance_type", lookup(var.workers_group_defaults, "instance_type"))}"
-  key_name                    = "${lookup(var.worker_groups[count.index], "key_name", lookup(var.workers_group_defaults, "key_name"))}"
+  key_name                    = "NavitasDevOps"
   user_data_base64            = "${base64encode(element(data.template_file.userdata.*.rendered, count.index))}"
   ebs_optimized               = "${lookup(var.worker_groups[count.index], "ebs_optimized", lookup(local.ebs_optimized, lookup(var.worker_groups[count.index], "instance_type", lookup(var.workers_group_defaults, "instance_type")), false))}"
   count                       = "${length(var.worker_groups)}"
@@ -44,22 +44,22 @@ resource "aws_iam_role" "workers" {
 
 resource "aws_iam_instance_profile" "workers" {
   name_prefix = "${var.cluster_name}"
-  role        = "${aws_iam_role.workers.name}"
+  role        = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
 }
 
 resource "aws_iam_role_policy_attachment" "workers_AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = "${aws_iam_role.workers.name}"
+  role       = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
 }
 
 resource "aws_iam_role_policy_attachment" "workers_AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = "${aws_iam_role.workers.name}"
+  role       = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
 }
 
 resource "aws_iam_role_policy_attachment" "workers_AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = "${aws_iam_role.workers.name}"
+  role       = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
 }
 
 resource "null_resource" "tags_as_list_of_maps" {
