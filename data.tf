@@ -59,7 +59,7 @@ data template_file config_map_aws_auth {
   template = "${file("${path.module}/templates/config-map-aws-auth.yaml.tpl")}"
 
   vars {
-    role_arn = "${aws_iam_role.workers.arn}"
+    role_arn = "arn:aws:iam::550522744793:role/DevopsAdminRole"
   }
 }
 

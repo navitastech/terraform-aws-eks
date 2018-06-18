@@ -51,5 +51,5 @@ output "worker_security_group_id" {
 
 output "worker_iam_role_name" {
   description = "IAM role name attached to EKS workers"
-  value       = "${aws_iam_role.workers.name}"
+  value       = "arn:aws:iam::550522744793:role/DevopsAdminRole"
 }
