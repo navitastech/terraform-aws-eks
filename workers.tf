@@ -44,22 +44,22 @@ resource "aws_iam_role" "workers" {
 
 resource "aws_iam_instance_profile" "workers" {
   name_prefix = "${var.cluster_name}"
-  role        = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
+  role        = "arn:aws:iam::550522744793:role/DevopsAdminRole"
 }
 
 resource "aws_iam_role_policy_attachment" "workers_AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
+  role       = "arn:aws:iam::550522744793:role/DevopsAdminRole"
 }
 
 resource "aws_iam_role_policy_attachment" "workers_AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
+  role       = "arn:aws:iam::550522744793:role/DevopsAdminRole"
 }
 
 resource "aws_iam_role_policy_attachment" "workers_AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
+  role       = "arn:aws:iam::550522744793:role/DevopsAdminRole"
 }
 
 resource "null_resource" "tags_as_list_of_maps" {
