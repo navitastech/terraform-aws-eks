@@ -8,10 +8,10 @@ resource "aws_eks_cluster" "this" {
     subnet_ids         = ["${var.subnets}"]
   }
 
-  depends_on = [
-    "aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy",
-    "aws_iam_role_policy_attachment.cluster_AmazonEKSServicePolicy",
-  ]
+  # depends_on = [
+  # "aws_iam_role_policy_attachment.cluster_AmazonEKSClusterPolicy",
+  # "aws_iam_role_policy_attachment.cluster_AmazonEKSServicePolicy",
+  # ]
 }
 
 # resource "aws_security_group" "cluster" {
@@ -21,6 +21,7 @@ resource "aws_eks_cluster" "this" {
 # tags        = "${merge(var.tags, map("Name", "${var.cluster_name}-eks_cluster_sg"))}"
 # count       = "${var.cluster_security_group_id == "" ? 1 : 0}"
 # }
+
 
 # resource "aws_security_group_rule" "cluster_egress_internet" {
 # description       = "Allow cluster egress access to the Internet."
@@ -55,17 +56,19 @@ resource "aws_eks_cluster" "this" {
 # count             = "${var.cluster_security_group_id == "" ? 1 : 0}"
 # }
 
-resource "aws_iam_role" "cluster" {
-  name_prefix        = "${var.cluster_name}"
-  assume_role_policy = "${data.aws_iam_policy_document.cluster_assume_role_policy.json}"
-}
 
-resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = "${aws_iam_role.cluster.name}"
-}
+# resource "aws_iam_role" "cluster" {
+# name_prefix        = "${var.cluster_name}"
+# assume_role_policy = "${data.aws_iam_policy_document.cluster_assume_role_policy.json}"
+# }
+# 
+# resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
+# policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+# role       = "${aws_iam_role.cluster.name}"
+# }
+# 
+# resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSServicePolicy" {
+# policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+# role       = "${aws_iam_role.cluster.name}"
+# }
 
-resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSServicePolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role       = "${aws_iam_role.cluster.name}"
-}

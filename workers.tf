@@ -21,7 +21,7 @@ resource "aws_launch_configuration" "workers" {
   associate_public_ip_address = "${lookup(var.worker_groups[count.index], "public_ip", lookup(var.workers_group_defaults, "public_ip"))}"
   security_groups             = ["sg-1f3be757"]
   iam_instance_profile        = "arn:aws:iam::550522744793:instance-profile/DevopsAdminRole"
-  image_id                    = "ami-43a15f3e"
+  image_id                    = "ami-dea4d5a1"
   instance_type               = "${lookup(var.worker_groups[count.index], "instance_type", lookup(var.workers_group_defaults, "instance_type"))}"
   key_name                    = "NavitasDevOps"
   user_data_base64            = "${base64encode(element(data.template_file.userdata.*.rendered, count.index))}"
